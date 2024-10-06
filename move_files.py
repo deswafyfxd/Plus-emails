@@ -6,15 +6,16 @@ def main():
         config = yaml.safe_load(f)
 
     bases = [
-        config['gmail_base'],
-        config['outlook_base'],
-        config['popular_domains']['yahoo_base'],
-        config['popular_domains']['hotmail_base'],
-        config['popular_domains']['aol_base'],
-        config['popular_domains']['icloud_base'],
-        config['popular_domains']['proton_base'],
-        config['popular_domains']['gmx_base']
+        config.get('gmail_base'),
+        config.get('outlook_base'),
+        config['popular_domains'].get('yahoo_base'),
+        config['popular_domains'].get('hotmail_base'),
+        config['popular_domains'].get('aol_base'),
+        config['popular_domains'].get('icloud_base'),
+        config['popular_domains'].get('proton_base'),
+        config['popular_domains'].get('gmx_base')
     ]
+    bases = [base for base in bases if base is not None]
 
     for base in bases:
         domain = base.split('@')[1].split('.')[0]
