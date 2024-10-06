@@ -1,0 +1,39 @@
+gmail_base: "bharathbansal@gmail.com"
+outlook_base: "bharathbansal@outlook.com"
+gmail_count: 10
+outlook_count: 5
+use_personal_names:
+  indian: false
+  western: true
+  japanese: false
+  chinese: false
+  other: false
+  first_name: true
+  last_name: true
+use_surnames: false
+use_nicknames: false
+use_brand_names: false
+use_place_names: false
+use_pen_names: false
+use_stage_names: false
+use_usernames: false
+use_scientific_names: false
+adding_numbers: true  # Enable or disable adding random numbers
+numbers_count: 2      # Number of random digits to add
+custom_domains_list:   # List of custom domains
+  - "customdomain.com"
+  - "anotherdomain.org"
+popular_domains:
+  yahoo_base: "bharathbansal@yahoo.com"
+  hotmail_base: "bharathbansal@hotmail.com"
+  aol_base: "bharathbansal@aol.com"
+  icloud_base: "bharathbansal@icloud.com"
+  proton_base: "bharathbansal@proton.me"
+  gmx_base: "bharathbansal@gmx.com"
+  yahoo_count: 0
+  hotmail_count: 0
+  aol_count: 0
+  icloud_count: 0
+  proton_count: 0
+  gmx_count: 0
+max_email_length: 30  # Maximum length for generated emails
