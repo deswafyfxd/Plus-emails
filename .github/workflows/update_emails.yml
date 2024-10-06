@@ -33,26 +33,22 @@ jobs:
         run: |
           python move_files.py
 
+      - name: Send to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python send_to_discord.py
+
       - name: Commit and Push Changes
-        if: github.event_name != 'workflow_dispatch'
+        if: ${{ secrets.PUSH_TO_GITHUB }} == 'true'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          if [ "${{ secrets.PUSH_TO_GITHUB }}" == "true" ]; then
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add .
-            if ! git diff-index --quiet HEAD; then
-              git commit -m "Update generated emails [skip ci]"
-              git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/deswafyfxd/Plus-emails.git HEAD:main
-            else
-              echo "No changes to commit"
-            fi
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Update generated emails [skip ci]"
+            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/deswafyfxd/Plus-emails.git HEAD:main
           else
-            echo "Pushing to GitHub is disabled"
-          fi
-
-      - name: Send to Discord
-        if: always()
-        run: |
-          python send_to_discord.py
+            echo "No changes to commit"
