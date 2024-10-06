@@ -1,4 +1,4 @@
-use_all_constraints: false  # Enable or disable all constraints at once
+use_all_constraints: true  # Enable or disable all constraints at once
 
 allowed_characters:         # Allowed characters feature
   use_allowed_characters: false
