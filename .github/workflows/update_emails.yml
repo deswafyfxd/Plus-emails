@@ -56,7 +56,8 @@ for base in bases:
         while os.path.exists(f'{domain}/{base.replace('@', '_')}_emails_{counter}.txt'):
             counter += 1
         file_name = f'{base.replace('@', '_')}_emails_{counter}.txt'
-    os.rename(file_name, f'{domain}/{file_name}')
+    if os.path.exists(file_name):
+        os.rename(file_name, f'{domain}/{file_name}')
 "
 
       - name: Commit and Push Changes
