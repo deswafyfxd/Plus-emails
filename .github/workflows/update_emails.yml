@@ -40,7 +40,7 @@ jobs:
           python send_to_discord.py
 
       - name: Commit and Push Changes
-        if: ${{ secrets.PUSH_TO_GITHUB }} == 'true'
+        if: env.PUSH_TO_GITHUB == 'false'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
