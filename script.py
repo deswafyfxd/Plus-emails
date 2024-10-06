@@ -3,6 +3,7 @@ from faker import Faker
 import yaml
 import re
 import os
+import requests
 
 faker = Faker()
 
@@ -85,21 +86,13 @@ def generate_emails(base, domain, count, name_category, use_first_name, use_last
     print(f"Generated emails for {base} @ {domain}: {emails}")  # Debug print statement
     return emails
 
-def write_to_file(base, domain, emails):
-    folder_name = domain.split('.')[0]
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
-    file_name = f'{base.replace("@", "_")}_emails.txt'
-    if os.path.exists(f'{domain}/{file_name}'):
-        counter = 1
-        while os.path.exists(f'{domain}/{base.replace("@", "_")}_emails_{counter}.txt'):
-            counter += 1
-        file_name = f'{base.replace("@", "_")}_emails_{counter}.txt'
-    with open(os.path.join(folder_name, file_name), 'w') as f:
-        for email in emails:
-            f.write(f"{email}\n")
-    
-    print(f"Written emails to {os.path.join(folder_name, file_name)}")  # Debug print statement
+def send_to_discord(emails, webhook_url):
+    for email in emails:
+        response = requests.post(webhook_url, json={"content": email})
+        if response.status_code == 200:
+            print(f"Successfully sent {email} to Discord")
+        else:
+            print(f"Failed to send {email} to Discord, status code: {response.status_code}")
 
 def main():
     with open('control.yaml', 'r') as f:
@@ -110,6 +103,11 @@ def main():
 
     with open('character_constraints.yaml', 'r') as f:
         constraints = yaml.safe_load(f)
+
+    discord_webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
+    if not discord_webhook_url:
+        print("No Discord webhook URL provided.")
+        return
 
     gmail_enabled = control['gmail']
     outlook_enabled = control['outlook']
@@ -165,7 +163,7 @@ def main():
                 print(f"No email count specified for {domain}, skipping.")
                 continue
             emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-            write_to_file(base, domain, emails)
+            send_to_discord(emails, discord_webhook_url)
 
 if __name__ == "__main__":
     main()
