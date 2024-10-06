@@ -26,6 +26,18 @@ jobs:
         run: |
           python script.py
 
+      - name: Create Folders and Move Files
+        run: |
+          domains=("gmail" "outlook" "yahoo" "hotmail" "aol" "icloud" "proton" "gmx" "custom")
+          for domain in "${domains[@]}"; do
+            if [ ! -d "$domain" ]; then
+              mkdir $domain
+            fi
+            if ls ${domain}_emails.txt 1> /dev/null 2>&1; then
+              mv ${domain}_emails.txt $domain/
+            fi
+          done
+
       - name: Commit and Push Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
