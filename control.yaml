@@ -1,0 +1,11 @@
+gmail: true
+outlook: true
+custom_domains: true  # Enable or disable custom domains
+use_popular_domains:
+  yahoo: false
+  hotmail: false
+  aol: false
+  icloud: false
+  proton: false
+  gmx: false
+email_validation: true  # Enable or disable email validation
