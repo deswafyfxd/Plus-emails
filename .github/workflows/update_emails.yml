@@ -25,13 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install faker pyyaml requests
 
-      - name: Generate Emails
-        run: |
-          python script.py
-
-      - name: Send to Discord
+      - name: Generate and Send Emails to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          python send_to_discord.py
-
+          python script.py
