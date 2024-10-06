@@ -28,12 +28,13 @@ jobs:
 
       - name: Create Folders and Move Files
         run: |
-          bases=$(python -c "
+          python -c "
 import yaml
+import os
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
-    
+
 bases = [
     config['gmail_base'],
     config['outlook_base'],
@@ -46,25 +47,17 @@ bases = [
 ]
 
 for base in bases:
-    print(base)
-          ")
-          for base in ${bases[@]}; do
-            domain=$(echo $base | cut -d '@' -f 2 | cut -d '.' -f 1)
-            if [ ! -d "$domain" ]; then
-              mkdir $domain
-            fi
-            file_name=$(echo $base | sed 's/@/_/g')_emails.txt
-            if [ -f "$domain/$file_name" ]; then
-              counter=1
-              while [ -f "$domain/$(echo $base | sed 's/@/_/g')_emails_$counter.txt" ]; do
-                counter=$((counter + 1))
-              done
-              file_name=$(echo $base | sed 's/@/_/g')_emails_$counter.txt
-            fi
-            if ls $file_name 1> /dev/null 2>&1; then
-              mv $file_name $domain/
-            fi
-          done
+    domain = base.split('@')[1].split('.')[0]
+    if not os.path.exists(domain):
+        os.makedirs(domain)
+    file_name = f'{base.replace('@', '_')}_emails.txt'
+    if os.path.exists(f'{domain}/{file_name}'):
+        counter = 1
+        while os.path.exists(f'{domain}/{base.replace('@', '_')}_emails_{counter}.txt'):
+            counter += 1
+        file_name = f'{base.replace('@', '_')}_emails_{counter}.txt'
+    os.rename(file_name, f'{domain}/{file_name}')
+"
 
       - name: Commit and Push Changes
         env:
