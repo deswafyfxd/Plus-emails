@@ -133,4 +133,33 @@ def main():
     if popular_domains.get('yahoo', False):
         base = config['yahoo_base']
         count = config['yahoo_count']
-        yahoo_emails = generate_emails(base, "yahoo.com", count
+        yahoo_emails = generate_emails(base, "yahoo.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("yahoo_emails.txt", yahoo_emails)
+    if popular_domains.get('hotmail', False):
+        base = config['hotmail_base']
+        count = config['hotmail_count']
+        hotmail_emails = generate_emails(base, "hotmail.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("hotmail_emails.txt", hotmail_emails)
+    if popular_domains.get('aol', False):
+        base = config['aol_base']
+        count = config['aol_count']
+        aol_emails = generate_emails(base, "aol.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("aol_emails.txt", aol_emails)
+    if popular_domains.get('icloud', False):
+        base = config['icloud_base']
+        count = config['icloud_count']
+        icloud_emails = generate_emails(base, "icloud.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("icloud_emails.txt", icloud_emails)
+    if popular_domains.get('proton', False):
+        base = config['proton_base']
+        count = config['proton_count']
+        proton_emails = generate_emails(base, "proton.me", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("proton_emails.txt", proton_emails)
+    if popular_domains.get('gmx', False):
+        base = config['gmx_base']
+        count = config['gmx_count']
+        gmx_emails = generate_emails(base, "gmx.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file("gmx_emails.txt", gmx_emails)
+
+if __name__ == "__main__":
+    main()
