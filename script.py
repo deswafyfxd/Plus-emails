@@ -87,17 +87,13 @@ def write_to_file(base, domain, emails):
     folder_name = domain.split('.')[0]
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
-    
-    base_filename = base.replace('@', '_')
-    filename = f"{base_filename}_emails.txt"
-    
-    # Check if file already exists and add a number if it does
-    counter = 1
-    while os.path.isfile(os.path.join(folder_name, filename)):
-        filename = f"{base_filename}_emails_{counter}.txt"
-        counter += 1
-    
-    with open(os.path.join(folder_name, filename), 'w') as f:
+    file_name = f'{base.replace("@", "_")}_emails.txt'
+    if os.path.exists(f'{domain}/{file_name}'):
+        counter = 1
+        while os.path.exists(f'{domain}/{base.replace("@", "_")}_emails_{counter}.txt'):
+            counter += 1
+        file_name = f'{base.replace("@", "_")}_emails_{counter}.txt'
+    with open(os.path.join(folder_name, file_name), 'w') as f:
         for email in emails:
             f.write(f"{email}\n")
 
@@ -158,10 +154,11 @@ def main():
         domains.append("gmx.com")
     
     for domain in domains:
-        base = config[f"{domain.split('.')[0]}_base"]
-        count = config[f"{domain.split('.')[0]}_count"]
-        emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file(base, domain, emails)
+        base = config.get(f"{domain.split('.')[0]}_base")
+        if base:
+            count = config.get(f"{domain.split('.')[0]}_count", 0)
+            emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+            write_to_file(base, domain, emails)
 
 if __name__ == "__main__":
     main()
