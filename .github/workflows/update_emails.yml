@@ -28,13 +28,15 @@ jobs:
 
       - name: Create Folders and Move Files
         run: |
-          domains=("gmail" "outlook" "yahoo" "hotmail" "aol" "icloud" "proton" "gmx" "custom")
-          for domain in "${domains[@]}"; do
+          bases=("bharathbansal@gmail.com" "bharathbansal@outlook.com" "bharathbansal@yahoo.com" "bharathbansal@hotmail.com" "bharathbansal@aol.com" "bharathbansal@icloud.com" "bharathbansal@proton.me" "bharathbansal@gmx.com")
+          for base in "${bases[@]}"; do
+            domain=$(echo $base | cut -d '@' -f 2 | cut -d '.' -f 1)
             if [ ! -d "$domain" ]; then
               mkdir $domain
             fi
-            if ls ${domain}_emails.txt 1> /dev/null 2>&1; then
-              mv ${domain}_emails.txt $domain/
+            file_name=$(echo $base | sed 's/@/_/g')_emails.txt
+            if ls $file_name 1> /dev/null 2>&1; then
+              mv $file_name $domain/
             fi
           done
 
