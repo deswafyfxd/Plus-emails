@@ -161,6 +161,9 @@ def main():
         base = config.get(f"{domain.split('.')[0]}_base")
         if base:
             count = config.get(f"{domain.split('.')[0]}_count", 0)
+            if count == 0:
+                print(f"No email count specified for {domain}, skipping.")
+                continue
             emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
             write_to_file(base, domain, emails)
 
