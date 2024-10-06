@@ -2,6 +2,7 @@ import random
 from faker import Faker
 import yaml
 import os
+import re
 import requests
 
 faker = Faker()
