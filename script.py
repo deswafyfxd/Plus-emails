@@ -81,6 +81,8 @@ def generate_emails(base, domain, count, name_category, use_first_name, use_last
         
         if is_valid_email(email):
             emails.append(email)
+    
+    print(f"Generated emails for {base} @ {domain}: {emails}")  # Debug print statement
     return emails
 
 def write_to_file(base, domain, emails):
@@ -96,6 +98,8 @@ def write_to_file(base, domain, emails):
     with open(os.path.join(folder_name, file_name), 'w') as f:
         for email in emails:
             f.write(f"{email}\n")
+    
+    print(f"Written emails to {os.path.join(folder_name, file_name)}")  # Debug print statement
 
 def main():
     with open('control.yaml', 'r') as f:
