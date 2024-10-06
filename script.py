@@ -16,6 +16,7 @@ def is_valid_email(email):
 
 def generate_emails(base, domain, count):
     emails = []
+    print(f"Generating emails for base: {base}, domain: {domain}, count: {count}")
     for _ in range(count):
         first_name = faker.first_name().lower()
         last_name = faker.last_name().lower()
@@ -26,15 +27,19 @@ def generate_emails(base, domain, count):
         if is_valid_email(email):
             emails.append(email)
     
-    print(f"Generated emails for {base} @ {domain}: {emails}")
+    print(f"Generated emails: {emails}")
     return emails
 
 def main():
+    print("Reading control.yaml")
     with open('control.yaml', 'r') as f:
         control = yaml.safe_load(f)
+    print("Control config:", control)
     
+    print("Reading config.yaml")
     with open('config.yaml', 'r') as f:
         config = yaml.safe_load(f)
+    print("Config config:", config)
 
     gmail_enabled = control['gmail']
     outlook_enabled = control['outlook']
@@ -47,8 +52,10 @@ def main():
     
     for domain in domains:
         base = config.get(f"{domain.split('.')[0]}_base")
+        print(f"Base for domain {domain}: {base}")
         if base:
             count = config.get(f"{domain.split('.')[0]}_count", 5)  # Use a small number for testing
+            print(f"Email count for {base} @ {domain}: {count}")
             emails = generate_emails(base, domain, count)
 
 if __name__ == "__main__":
