@@ -83,10 +83,11 @@ def generate_emails(base, domain, count, name_category, use_first_name, use_last
             emails.append(email)
     return emails
 
-def write_to_file(domain, filename, emails):
+def write_to_file(base, domain, emails):
     folder_name = domain.split('.')[0]
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
+    filename = f"{base.replace('@', '_')}_emails.txt"
     with open(os.path.join(folder_name, filename), 'w') as f:
         for email in emails:
             f.write(f"{email}\n")
@@ -151,7 +152,7 @@ def main():
         base = config[f"{domain.split('.')[0]}_base"]
         count = config[f"{domain.split('.')[0]}_count"]
         emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file(domain, f"{domain.split('.')[0]}_emails.txt", emails)
+        write_to_file(base, domain, emails)
 
 if __name__ == "__main__":
     main()
