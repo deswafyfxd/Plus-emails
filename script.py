@@ -2,6 +2,7 @@ import random
 from faker import Faker
 import yaml
 import re
+import os
 
 faker = Faker()
 
@@ -19,10 +20,10 @@ def apply_constraints(name, constraints):
         if constraints['allowed_characters']['use_allowed_characters']:
             if constraints['allowed_characters']['use_only_specific']:
                 allowed_chars = set(constraints['allowed_characters']['specific_characters'])
-                if constraints['allowed_characters']['combine_with_common']:
-                    allowed_chars.update(constraints['allowed_characters']['combined_characters'])
             else:
                 allowed_chars = set(constraints['allowed_characters']['common_characters'])
+                if constraints['allowed_characters']['combine_with_specific']:
+                    allowed_chars.update(constraints['allowed_characters']['combined_characters'])
             name = ''.join(filter(lambda c: c in allowed_chars, name))
         
         if constraints['disallowed_characters']['use_disallowed_characters']:
@@ -82,8 +83,11 @@ def generate_emails(base, domain, count, name_category, use_first_name, use_last
             emails.append(email)
     return emails
 
-def write_to_file(filename, emails):
-    with open(filename, 'w') as f:
+def write_to_file(domain, filename, emails):
+    folder_name = domain.split('.')[0]
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+    with open(os.path.join(folder_name, filename), 'w') as f:
         for email in emails:
             f.write(f"{email}\n")
 
@@ -131,35 +135,23 @@ def main():
     
     popular_domains = control.get('use_popular_domains', {})
     if popular_domains.get('yahoo', False):
-        base = config['yahoo_base']
-        count = config['yahoo_count']
-        yahoo_emails = generate_emails(base, "yahoo.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("yahoo_emails.txt", yahoo_emails)
+        domains.append("yahoo.com")
     if popular_domains.get('hotmail', False):
-        base = config['hotmail_base']
-        count = config['hotmail_count']
-        hotmail_emails = generate_emails(base, "hotmail.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("hotmail_emails.txt", hotmail_emails)
+        domains.append("hotmail.com")
     if popular_domains.get('aol', False):
-        base = config['aol_base']
-        count = config['aol_count']
-        aol_emails = generate_emails(base, "aol.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("aol_emails.txt", aol_emails)
+        domains.append("aol.com")
     if popular_domains.get('icloud', False):
-        base = config['icloud_base']
-        count = config['icloud_count']
-        icloud_emails = generate_emails(base, "icloud.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("icloud_emails.txt", icloud_emails)
+        domains.append("icloud.com")
     if popular_domains.get('proton', False):
-        base = config['proton_base']
-        count = config['proton_count']
-        proton_emails = generate_emails(base, "proton.me", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("proton_emails.txt", proton_emails)
+        domains.append("proton.me")
     if popular_domains.get('gmx', False):
-        base = config['gmx_base']
-        count = config['gmx_count']
-        gmx_emails = generate_emails(base, "gmx.com", count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
-        write_to_file("gmx_emails.txt", gmx_emails)
+        domains.append("gmx.com")
+    
+    for domain in domains:
+        base = config[f"{domain.split('.')[0]}_base"]
+        count = config[f"{domain.split('.')[0]}_count"]
+        emails = generate_emails(base, domain, count, name_category, use_first_name, use_last_name, add_numbers, numbers_count, max_email_length, constraints)
+        write_to_file(domain, f"{domain.split('.')[0]}_emails.txt", emails)
 
 if __name__ == "__main__":
     main()
