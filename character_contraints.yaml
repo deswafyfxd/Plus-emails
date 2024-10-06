@@ -1,0 +1,21 @@
+use_all_constraints: true  # Enable or disable all constraints at once
+
+allowed_characters:         # Allowed characters feature
+  use_allowed_characters: false
+  common_characters: "abcdefghijklmnopqrstuvwxyz0123456789-._+"
+  use_only_specific: true  # If false, use specified characters below
+  specific_characters: "abcdefghijklmnopqrstuvwxyz0123456789+"
+  combine_with_specific: false  # Combine with specific characters if true
+  combined_characters: ".-_"
+
+disallowed_characters:      # Disallowed characters feature
+  use_disallowed_characters: false
+  characters: " !#$%&'*+/=?^_`{|}~"
+
+max_local_part_length:      # Local part length feature
+  use_max_local_part_length: false
+  length: 64
+
+min_local_part_length:      # Minimum local part length feature
+  use_min_local_part_length: false
+  length: 1
