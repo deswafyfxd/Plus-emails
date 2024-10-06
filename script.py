@@ -87,7 +87,16 @@ def write_to_file(base, domain, emails):
     folder_name = domain.split('.')[0]
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
-    filename = f"{base.replace('@', '_')}_emails.txt"
+    
+    base_filename = base.replace('@', '_')
+    filename = f"{base_filename}_emails.txt"
+    
+    # Check if file already exists and add a number if it does
+    counter = 1
+    while os.path.isfile(os.path.join(folder_name, filename)):
+        filename = f"{base_filename}_emails_{counter}.txt"
+        counter += 1
+    
     with open(os.path.join(folder_name, filename), 'w') as f:
         for email in emails:
             f.write(f"{email}\n")
